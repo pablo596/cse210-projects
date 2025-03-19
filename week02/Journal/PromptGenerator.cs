@@ -29,5 +29,11 @@ namespace JournalProgram
             int index = _random.Next(_prompts.Count);
             return _prompts[index];
         }
+        public void AddPrompt(string prompt)
+        {
+            _prompts.Add(prompt);
+            Console.WriteLine("New prompt added.");
+        }
+
     }
 }

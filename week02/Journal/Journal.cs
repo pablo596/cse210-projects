@@ -48,23 +48,36 @@ namespace JournalProgram
         // Method to load entries from a file
         public void LoadFromFile(string file)
         {
-            if (File.Exists(file))
+            if (!File.Exists(file)) // Verifica si el archivo existe
             {
-                _entries.Clear(); // Clear current entries
-                string[] lines = File.ReadAllLines(file);
-                foreach (string line in lines)
+                Console.WriteLine("Error: The file does not exist. Please check the filename.");
+                return;
+            }
+
+            _entries.Clear(); // Limpia la lista actual antes de cargar
+            string[] lines = File.ReadAllLines(file);
+            foreach (string line in lines)
+            {
+                Entry entry = Entry.FromString(line);
+                if (entry != null)
                 {
-                    Entry entry = Entry.FromString(line);
-                    if (entry != null)
-                    {
-                        _entries.Add(entry);
-                    }
+                    _entries.Add(entry);
                 }
-                Console.WriteLine("Journal loaded from file: " + file);
+            }
+            Console.WriteLine("Journal loaded from file: " + file);
+        }
+
+        // Method to load delete from a file
+        public void DeleteEntry(int index)
+        {
+            if (index >= 0 && index < _entries.Count)
+            {
+                _entries.RemoveAt(index);
+                Console.WriteLine("Entry deleted successfully.");
             }
             else
             {
-                Console.WriteLine("File does not exist.");
+                Console.WriteLine("Invalid index.");
             }
         }
     }

@@ -31,16 +31,16 @@ namespace JournalProgram
         public override string ToString()
         {
             // Using '|' as a delimiter
-            return $"{_date}|{_promptText}|{_entryText}";
+            return $"\"{_date}\",\"{_promptText}\",\"{_entryText}\"";
         }
 
         // Static method to create an entry from a string read from a file
         public static Entry FromString(string entryLine)
         {
-            string[] parts = entryLine.Split('|');
+            string[] parts = entryLine.Split("\",\""); // Divide correctamente los valores entre comillas
             if (parts.Length >= 3)
             {
-                return new Entry(parts[0], parts[1], parts[2]);
+                return new Entry(parts[0].Trim('"'), parts[1].Trim('"'), parts[2].Trim('"'));
             }
             return null;
         }
