@@ -18,7 +18,10 @@ class SimpleGoal : Goal
         return 0;
     }
 
-    public override bool IsComplete() => _isComplete;
+    public override bool IsComplete()
+    {
+        return _isComplete;
+    }
 
     public override string GetDetailsString()
     {
@@ -27,7 +30,7 @@ class SimpleGoal : Goal
     }
 
     public override string GetStringRepresentation()
-        => $"SimpleGoal|{_shortName}|{_description}|{_points}|{_isComplete}";
-
-    public void SetIsComplete(bool complete) => _isComplete = complete;
+    {
+        return $"SimpleGoal|{_shortName}|{_description}|{_points}|{_isComplete}";
+    }
 }

@@ -1,23 +1,47 @@
-using System;
-
 static class GoalFactory
 {
     public static Goal CreateGoalFromString(string data)
     {
         string[] parts = data.Split('|');
-        switch (parts[0])
+        string type = parts[0];
+
+        if (type == "SimpleGoal")
         {
-            case "SimpleGoal":
-                var sg = new SimpleGoal(parts[1], parts[2], int.Parse(parts[3]));
-                sg.SetIsComplete(bool.Parse(parts[4]));
-                return sg;
-            case "EternalGoal":
-                return new EternalGoal(parts[1], parts[2], int.Parse(parts[3]));
-            case "ChecklistGoal":
-                var cg = new ChecklistGoal(parts[1], parts[2], int.Parse(parts[3]), int.Parse(parts[5]), int.Parse(parts[4]));
-                cg.SetAmountCompleted(int.Parse(parts[6]));
-                return cg;
-            default: return null;
+            SimpleGoal goal = new SimpleGoal(parts[1], parts[2], int.Parse(parts[3]));
+            goal.SetIsComplete(bool.Parse(parts[4]));
+            return goal;
         }
+        else if (type == "EternalGoal")
+        {
+            return new EternalGoal(parts[1], parts[2], int.Parse(parts[3]));
+        }
+        else if (type == "ChecklistGoal")
+        {
+            ChecklistGoal goal = new ChecklistGoal(parts[1], parts[2], int.Parse(parts[3]), int.Parse(parts[5]), int.Parse(parts[4]));
+            goal.SetAmountCompleted(int.Parse(parts[6]));
+            return goal;
+        }
+        else if (type == "BonusGoal")
+        {
+            BonusGoal goal = new BonusGoal(parts[1], parts[2], int.Parse(parts[3]), int.Parse(parts[4]), int.Parse(parts[5]));
+            goal.SetTimesCompleted(int.Parse(parts[6]));
+            return goal;
+        }
+        return null;
+    }
+
+    private static void SetAmountCompleted(this ChecklistGoal goal, int amount)
+    {
+        typeof(ChecklistGoal).GetField("_amountCompleted", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance).SetValue(goal, amount);
+    }
+
+    private static void SetIsComplete(this SimpleGoal goal, bool complete)
+    {
+        typeof(SimpleGoal).GetField("_isComplete", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance).SetValue(goal, complete);
+    }
+
+    private static void SetTimesCompleted(this BonusGoal goal, int times)
+    {
+        typeof(BonusGoal).GetField("_timesCompleted", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance).SetValue(goal, times);
     }
 }
